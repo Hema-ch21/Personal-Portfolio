@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CH. Hema Sai Sree − Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Reset & Base */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f7f9fc;
+      color: #222;
+      scroll-behavior: smooth;
+    }
+
+    /* Nav top bar */
+    nav.sidebar {
+      width: 100%;
+      background: #1f2937;
+      padding: 1rem 2rem;
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      user-select: none;
+    }
+    nav.sidebar a {
+      color: #cbd5e1;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      transition: background-color 0.3s, color 0.3s;
+      cursor: pointer;
+    }
+    nav.sidebar a.active,
+    nav.sidebar a:hover {
+      background: #3b82f6;
+      color: white;
+    }
+
+    /* Main content */
+    main.content {
+      max-width: 900px;
+      margin: 6rem auto 3rem; /* margin top for nav */
+      padding: 0 2rem;
+    }
+    section {
+      background: #fff;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      opacity: 0;
+      transform: translateY(20px);
+      max-height: 0;
+      overflow: hidden;
+      transition: opacity 0.6s ease, transform 0.6s ease, max-height 0.6s ease;
+    }
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+      max-height: 2000px; /* enough to show all content */
+      overflow: visible;
+      transition: opacity 0.6s ease, transform 0.6s ease, max-height 0.6s ease;
+    }
+
+    h1, h2 {
+      color: #334155;
+      user-select: none;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      border-bottom: 3px solid #3b82f6;
+      padding-bottom: 0.5rem;
+    }
+    p {
+      margin-bottom: 1rem;
+      line-height: 1.6;
+      color: #475569;
+    }
+
+    /* Profile Circle */
+    .profile-circle {
+      width: 140px;
+      height: 140px;
+      background: #3b82f6;
+      color: #fff;
+      border-radius: 50%;
+      font-size: 4rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 0 15px #3b82f6;
+      user-select: none;
+    }
+
+    /* Skills */
+    .skills-grid {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .skill-box {
+      flex: 1 1 240px;
+      background: #3b82f6;
+      color: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(59,130,246,0.4);
+    }
+    .skill-box h3 {
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+      border-bottom: 2px solid rgba(255,255,255,0.6);
+      padding-bottom: 0.4rem;
+    }
+    .skill-list {
+      list-style: none;
+      padding-left: 0;
+    }
+    .skill-list li {
+      position: relative;
+      padding-left: 1rem;
+      margin-bottom: 0.6rem;
+    }
+    .skill-list li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: rgba(255,255,255,0.8);
+      font-weight: 900;
+    }
+
+    /* Projects */
+    .projects-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+    }
+    .project-card {
+      background: #e0e7ff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: transform 0.3s;
+    }
+    .project-card:hover {
+      transform: translateY(-5px);
+    }
+    .project-card h3 {
+      margin-bottom: 0.5rem;
+      color: #3730a3;
+    }
+    .project-card a {
+      color: #4338ca;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    /* Certification badges */
+    .badges {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #2563eb;
+      color: #fff;
+      padding: 0.6rem 1rem;
+      border-radius: 9999px;
+      box-shadow: 0 4px 8px rgba(37,99,235,0.4);
+      font-weight: 600;
+      transition: transform 0.3s;
+    }
+    .badge:hover {
+      transform: scale(1.05);
+    }
+    .badge img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+
+    /* Get in touch button */
+    #getInTouchBtn {
+      display: block;
+      margin: 2rem auto 0;
+      padding: 1rem 2.5rem;
+      background: #3b82f6;
+      color: #fff;
+      border: none;
+      font-size: 1.2rem;
+      border-radius: 9999px;
+      box-shadow: 0 6px 15px rgba(59,130,246,0.6);
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    #getInTouchBtn:hover {
+      background: #2563eb;
+    }
+
+    /* Contact Icons */
+    .contact-icons {
+      display: flex;
+      gap: 1.2rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    .contact-icons img {
+      width: 36px;
+      height: 36px;
+      filter: grayscale(100%);
+      border-radius: 4px;
+      transition: filter 0.3s, transform 0.3s;
+    }
+    .contact-icons a:hover img {
+      filter: none;
+      transform: scale(1.2);
+    }
+
+    /* Footer */
+    footer {
+      padding: 1rem 2rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+
+    /* Responsive */
+    @media (max-width: 720px) {
+      main.content {
+        margin: 8rem 1rem 3rem;
+        padding: 0 1rem;
+      }
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+      .skills-grid {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="sidebar" role="navigation" aria-label="Primary navigation">
+    <a href="#about" class="active" data-target="about">About Me</a>
+    <a href="#skills" data-target="skills">Skills</a>
+    <a href="#projects" data-target="projects">Projects</a>
+    <a href="#certifications" data-target="certifications">Certifications</a>
+    <a href="#contact" data-target="contact">Contact</a>
+  </nav>
+
+  <main class="content" role="main">
+    <!-- About -->
+    <section id="about" class="visible" tabindex="-1" aria-label="About Me section">
+      <div class="profile-circle" aria-hidden="true">HS</div>
+      <h1>CH. Hema Sai Sree</h1>
+      <p style="text-align:center;font-weight:600;font-size:1.2rem;color:#475569;">
+        Aspiring Full‑Stack Developer | B.Tech 3rd Year
+      </p>
+      <p>Hello! I'm a passionate developer building web apps, earning certifications, and diving into Unity 3D games.</p>
+      <button id="getInTouchBtn">Get in Touch</button>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills" tabindex="-1" aria-label="Skills section">
+      <h2>Skills</h2>
+      <div class="skills-grid">
+        <div class="skill-box">
+          <h3>Proficient</h3>
+          <ul class="skill-list">
+            <li>Java</li><li>HTML</li><li>CSS</li><li>JavaScript</li>
+          </ul>
+        </div>
+        <div class="skill-box">
+          <h3>Learning</h3>
+          <ul class="skill-list">
+            <li>React.js</li><li>Node.js</li><li>Express.js</li><li>MongoDB</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" tabindex="-1" aria-label="Projects section">
+      <h2>Projects</h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <h3>Bus Booking Website</h3>
+          <p>A responsive web app for booking bus tickets online.</p>
+          <a href="https://github.com/yourusername/bus-booking" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+        <div class="project-card">
+          <h3>Unity 3D Game</h3>
+          <p>An immersive Unity-based 3D game built with C#.</p>
+          <a href="https://github.com/yourusername/unity-game" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certifications -->
+    <section id="certifications" tabindex="-1" aria-label="Certifications section">
+      <h2>Certifications</h2>
+      <div class="badges">
+        <div class="badge">
+          <img src="https://cdn-icons-png.flaticon.com/512/906/906175.png" alt="Infosys Logo" />
+          Infosys Full Stack
+        </div>
+        <div class="badge">
+          <img src="https://cdn-icons-png.flaticon.com/512/919/919836.png" alt="MongoDB Logo" />
+          MongoDB Basics
+        </div>
+        <div class="badge">
+          <img src="https://cdn-icons-png.flaticon.com/512/1055/1055687.png" alt="Zudio Logo" />
+          Zudio Offer
+        </div>
+        <div class="badge">
+          <img src="https://cdn-icons-png.flaticon.com/512/5968/5968705.png" alt="Unity Logo" />
+          Unity 3D Game
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" tabindex="-1" aria-label="Contact section">
+      <h2>Contact</h2>
+      <p>Feel free to reach out via email or connect with me on GitHub and LinkedIn.</p>
+      <div class="contact-icons">
+        <a href="mailto:hema.sai.sree@example.com" aria-label="Send email"><img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Email Icon" /></a>
+        <a href="https://linkedin.com/in/hemasaisree" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn Icon" /></a>
+        <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile"><img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub Icon" /></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>&copy; 2025 CH. Hema Sai Sree. All rights reserved.</footer>
+
+  <script>
+    const navLinks = document.querySelectorAll('nav.sidebar a');
+    const sections = document.querySelectorAll('main.content section');
+
+    function hideAllSections() {
+      sections.forEach(sec => sec.classList.remove('visible'));
+    }
+
+    function showSection(id) {
+      hideAllSections();
+      const sec = document.getElementById(id);
+      if (sec) {
+        sec.classList.add('visible');
+        sec.focus(); // For accessibility - keyboard focus
+      }
+    }
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const targetId = link.getAttribute('data-target');
+        if (!targetId) return;
+
+        // Update active link styles
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+
+        // Show target section
+        showSection(targetId);
+
+        // Scroll smoothly to top of main content so section is visible below nav
+        document.querySelector('main.content').scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // Show About section by default on load
+    showSection('about');
+
+    // Get In Touch button scrolls to contact section & shows it
+    document.getElementById('getInTouchBtn').addEventListener('click', () => {
+      // Update nav links active state for Contact
+      navLinks.forEach(l => l.classList.remove('active'));
+      const contactLink = document.querySelector('nav.sidebar a[data-target="contact"]');
+      if(contactLink) contactLink.classList.add('active');
+
+      showSection('contact');
+      document.querySelector('main.content').scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+
+</body>
+</html>
